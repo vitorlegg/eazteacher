@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="vendor/img/logo/logo.png" rel="icon">
+  <title>Dashboard</title>
+
+  <link href="vendor/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link href="vendor/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="vendor/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="vendor/vendor/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css">
+  <!-- Bootstrap DatePicker -->  
+  <link href="vendor/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" >
+  <!-- Bootstrap Touchspin -->
+  <link href="vendor/vendor/bootstrap-touchspin/css/jquery.bootstrap-touchspin.css" rel="stylesheet" >
+  <!-- ClockPicker -->
+  <link href="vendor/vendor/clock-picker/clockpicker.css" rel="stylesheet">
+
+  <link href="vendor/css/ruang-admin.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<%= path %> >/home">
+        <div class="sidebar-brand-icon">
+          <img src="vendor/img/logo/logo.png">
+        </div>
+        <div class="sidebar-brand-text mx-3">EazyTeacher</div>
+      </a>
+
+      <hr class="sidebar-divider my-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="<%= path %>/home">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+
+      <hr class="sidebar-divider">
+      <div class="sidebar-heading">
+        Features
+      </div>
+
+      <li class="nav-item">
+        <a class="nav-link" href="<%= path %>/activities">
+          <i class="fas fa-snowboarding"></i>
+          <span>Activities</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="<%= path %>/groups">
+          <i class="fas fa-user-friends"></i>
+          <span>Groups</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="<%= path %>/messages">
+          <i class="fas fa-envelope"></i>
+          <span>Messages</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="<%= path %>/payments">
+          <i class="fas fa-money-bill-wave-alt"></i>
+          <span>Payments</span>
+        </a>
+      </li>
+
+      <hr class="sidebar-divider">
+      <div class="version" id="version-ruangadmin"></div>
+    </ul>
+    <!-- Sidebar -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        <!-- TopBar -->
+        <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-envelope fa-fw"></i>
+                <span class="badge badge-warning badge-counter"><%= ativeMessages.result.length %></span>
+              </a>
+              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                aria-labelledby="messagesDropdown">
+                <h6 class="dropdown-header">
+                  Message Center
+                </h6>
+                <% ativeMessages.result.forEach(element => { %>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="dropdown-list-image mr-3">
+                      <img class="rounded-circle" src="<%= element.foto %>" style="max-width: 60px" alt="">
+                      <div class="status-indicator bg-success"></div>
+                    </div>
+                    <div class="font-weight-bold">
+                      <div class="text-truncate"><%= element.titulo %></div>
+                      <div class="text-truncate"><%= element.mensagem %></div>
+                      <% if (element.time > 60 && element.time < 60 * 24) { %>
+                        <div class="small text-gray-500"><%= element.nome %> · <%= Math.floor(element.time / 60) %> h</div>
+                      <% } else if (element.time >= 60 * 24  && element.time < 60 * 24 * 30) { %>
+                        <div class="small text-gray-500"><%= element.nome %> · <%= Math.floor(element.time/(60 * 24)) %> d</div>
+                      <% } else if (element.time >= 60 * 24 * 30 && element.time < 60 * 24 * 30 * 12) { %>
+                        <div class="small text-gray-500"><%= element.nome %> · <%= Math.floor(element.time/(60 * 24 * 30)) %> mo</div>
+                      <% } else if (element.time >= 60 * 24 * 30 * 12) { %>
+                        <div class="small text-gray-500"><%= element.nome %> · <%= Math.floor(element.time/(60 * 24 * 30 * 12)) %> y</div>
+                      <% } else { %>
+                        <div class="small text-gray-500"><%= element.nome %> · <%= Math.floor(element.time) %> min</div>
+                      <% } %>            
+                    </div>
+                  </a>
+                  <% }); %>
+                <a class="dropdown-item text-center small text-gray-500" href="<%= path %>/messages">Read More Messages</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-tasks fa-fw"></i>
+                <span class="badge badge-success badge-counter"><%= pendingActivities.result.length %></span>
+              </a>
+              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                aria-labelledby="messagesDropdown">
+                <h6 class="dropdown-header">
+                  Task
+                </h6>
+                <% pendingActivities.result.forEach(element => { %>
+                  <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="mr-3">
+                      <div class="icon-circle bg-primary">
+                        <i class="fas fa-file-alt text-white"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="small text-gray-500"><%= element.conclusao %></div>
+                      <div class="text-truncate font-weight-bold"><%= element.titulo %></div>
+                      <span class="font-weight-bold"><%= element.descricao %></span>
+                    </div>
+                  </a>
+                <% }); %>
+                <a class="dropdown-item text-center small text-gray-500" href="<%= path %>/activities">View All Taks</a>
+              </div>
+            </li>
+            <div class="topbar-divider d-none d-sm-block"></div>
+              <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <img class="img-profile rounded-circle" src="<%=profile.result[0].foto%>" style="max-width: 70px">
+                  <span class="ml-2 d-none d-lg-inline text-white small">
+                    <%=session.nome%>
+                      <%=session.sobrenome%>
+                  </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                  <a class="dropdown-item" href="<%= path %>/profile">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Profile
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Logout
+                  </a>
+                </div>
+              </li>
+          </ul>
+        </nav>
+
+        <div class="container-fluid" id="container-wrapper">
+          <!-- Topbar -->

@@ -1,0 +1,88 @@
+<%- include('header'); -%>
+<div class="container-fluid" id="container-wrapper">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Messages</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="<%=path%>/">Home</a></li>
+      <li class="breadcrumb-item"><a href="<%=path%>/activities">Activities</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><%=assignedActivity.result[0].titulo%></li>
+    </ol>
+  </div>
+
+  <!-- Container Fluid-->
+  <div class="col-lg-12">
+    <div class="card mb-4">
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary"><%=assignedActivity.result[0].titulo%></h6>
+      </div>
+      <div class="table-responsive p-3">
+        <table class="table align-items-center table-flush table-hover" id="dataTableHover">
+          <thead class="thead-light">
+            <tr>
+              <th>Profile</th>
+              <th>Name</th>
+              <th>Delivered at</th>
+              <th>Deadline</th>
+              <th>Grade</th>
+              <th>Status</th>
+              <th>Download</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Profile</th>
+              <th>Name</th>
+              <th>Delivered at</th>
+              <th>Deadline</th>
+              <th>Grade</th>
+              <th>Status</th>
+              <th>Download</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <% assignedActivity.result.forEach(element => {%>
+              <tr>
+                <td><img class="rounded-circle" src="<%=element.foto%>" style="max-width: 40px"  alt=""></td>
+                <td><%=element.nome%></td>
+                <td><%=element.concluido%></td>
+                <td><%=element.conclusao%></td>
+                <% if (element.nota == null){%>
+                  <td>
+                    <div class="row d-flex align-items-center">
+                      <div class="col">
+                        <input name="notas"   step="0.5" type="number" style="display: inline;" class="form-control touchSpin1">
+                      </div>
+                      <div class="col">
+                        <a href="#" data-id="<%=element.id%>" class="btn btn-primary nota" style="display: inline;"><i class="fas fa-check"></i></a>
+                      </div>
+                    </div>
+                  </td>
+                <%}else{%>
+                  <td>
+                    <div class="row d-flex align-items-center">
+                      <div class="col">
+                        <input name="notas" value="<%=element.nota  %>" step="0.5" type="number" style="display: inline;" class="form-control touchSpin1">
+                      </div>
+                      <div class="col">
+                        <a href="#" data-id="<%=element.id%>" class="btn btn-primary nota" style="display: inline;"><i class="fas fa-check"></i></a>
+                      </div>
+                    </div>
+                  </td>
+                <%}%>
+                <% if (element.ativo == 1) {%>
+                  <td><span class="badge badge-success">Pending</span></td>
+                <%}else if(element.ativo == 2){%>
+                  <td><span class="badge badge-danger">Delivered</span></td>
+                <%}else {%>
+                  <td><span class="badge badge-danger">Graded</span></td>
+                <%}%>
+                <td><a href="#" data-url="<%=element.atividade%>" name ="download" class="btn btn-primary"><i class="fas fa-download"></i></a></td>
+              </tr> 
+            <%});%>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!---Container Fluid-->
+  <%- include('footer'); -%>

@@ -1,0 +1,54 @@
+<%- include('header'); -%>
+  <!-- Container Fluid-->
+  <div class="container-fluid" id="container-wrapper">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Payment</h1>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<%=path%>/">Home</a></li>
+        <li class="breadcrumb-item"><a href="<%=path%>/groups">Groups</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><%=path%></li>
+      </ol>
+    </div>
+  </div>
+  <!---Container Fluid-->
+
+  <div class="row mb-3">
+    <!-- Earnings (Monthly) Card Example -->
+    <% followers.result.forEach(element=> {%>
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+
+            <div class="row align-items-center">
+              <div class="col  dropdown-list-image mr-3">
+                <img class="rounded-circle" src="vendor/img/man.png" style="max-width: 60px" alt="">
+                <div class="status-indicator bg-success"></div>
+              </div>
+              <div class="col mr-2">
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  <%=element.nome%>#<%=element.grupos_id%>
+                </div>
+                <div class="text-xs font-weight-bold text-uppercase mb-1">
+                  <%=element.descricao%>
+                </div>
+              </div>
+              <div class="btn-group">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                  <div class="col-auto">
+                    <i class="fas fa-calendar fa-2x text-primary"></i>
+                  </div>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a name="createActivity" data-id=<%=element.grupos_id%> data-toggle = "modal" data-target =
+                      "#modalCreateActivity" class = "dropdown-item text-primary opt">Create Activity</a></li>
+                  <li><a name="excluir" data-id=<%=element.grupos_id%> class = "dropdown-item text-danger">Excluir</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%}); %>
+  </div>
+<%- include('footer'); -%>

@@ -1,0 +1,134 @@
+<%- include('header'); -%>
+  <!-- Container Fluid-->
+  <div class="container-fluid" id="container-wrapper">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Messages</h1>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="<%=path%>/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Messages</li>
+      </ol>
+    </div>
+
+    <div class="col-lg-12">
+      <div class="card mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Received Messages</h6>
+        </div>
+        <div class="table-responsive p-3">
+          <table class="table align-items-center table-flush table-hover" id="dataTableHover">
+            <thead class="thead-light">
+              <tr>
+                <th>Title</th>
+                <th>Message</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Read</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Title</th>
+                <th>Message</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Read</th>
+              </tr>
+            </tfoot>
+            <tbody>
+              <% messages.result.forEach(element => {%>
+                <tr>
+                  <% if (element.ativo == 1) { %>
+                    <td><a href="" class="messagesRead font-weight-bold" data-id="<%=element.id%>" ><%=element.titulo%></a></td>
+                    <td class="font-weight-bold"><%=element.mensagem%></td>
+                    <td class="font-weight-bold"> <img class="rounded-circle" src="<%=element.foto%>" style="max-width: 30px" alt=""> <%=element.nome%></td>
+                  <%}else if (element.ativo == 2) { %>
+                    <td><a href="" class="messagesRead" data-id="<%=element.id%>" ><%=element.titulo%></a></td>
+                    <td><%=element.mensagem%></td>
+                    <td><img class="rounded-circle" src="<%=element.foto%>" style="max-width: 30px" alt=""> <%=element.nome%></td>
+                  <%}%>
+                  <% if (element.time > 60 && element.time < 60 * 24) { %>
+                  <td class="small text-gray-500 message-time font-weight-bold"><%= Math.floor(element.time/ 60) %> h</td>
+                  <%}else if (element.time >= 60 * 24  && element.time < 60 * 24 * 30) { %>
+                  <td class="small text-gray-500 message-time font-weight-bold"><%= Math.floor(element.time / (60 * 24)) %> d</td>
+                  <%}else if (element.time >= 60 * 24 * 30 && element.time < 60 * 24 * 30 * 12) { %>
+                  <td class="small text-gray-500 message-time font-weight-bold"><%= Math.floor(element.time/(60 * 24 * 30)) %> mo</td>
+                  <%}else if (element.time >= 60 * 24 * 30 * 12) {%>
+                  <td class="small text-gray-500 message-time font-weight-bold"><%= Math.floor(element.time/(60 * 24 * 30 * 12)) %> y</td>
+                  <%}else{%>
+                  <td class="small text-gray-500 message-time font-weight-bold"><%= Math.floor(element.time) %> min</td>
+                  <%}%>
+                  <% if (element.ativo == 2) {%>
+                    <td><span class="badge badge-success">Read</span></td>
+                  <%}else if(element.ativo == 1){%>
+                    <td><span class="badge badge-danger">Not Read</span></td>
+                  <%}%>
+                </tr> 
+              <%});%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12">
+      <div class="card mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Sent Messages</h6>
+        </div>
+        <div class="table-responsive p-3">
+          <table class="table align-items-center table-flush table-hover" id="dataTableHover1">
+            <thead class="thead-light">
+              <tr>
+                <th>Title</th>
+                <th>Message</th>
+                <th>Author</th>
+                <th>Read by</th>
+                <th>Date</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Title</th>
+                <th>Message</th>
+                <th>Author</th>
+                <th>Read by</th>
+                <th>Date</th>
+                <th>Delete</th>
+              </tr>
+            </tfoot>
+            <tbody>
+              <% createdMessages.result.forEach(element => {%>
+                <tr>
+                  <% if (element.ativo == 1) { %>
+                    <td><a href="" class="messagesRead font-weight-bold" data-id="<%=element.id%>" ><%=element.titulo%></a></td>
+                    <td class="font-weight-bold"><%=element.mensagem%></td>
+                    <td class="font-weight-bold"><img class="rounded-circle" src="<%=element.foto%>" style="max-width: 30px" alt=""><%=element.nome%></td>
+                  <%}else if (element.ativo == 2) { %>
+                    <td><a href="" class="messagesRead" data-id="<%=element.id%>" ><%=element.titulo%></a></td>
+                    <td><%=element.mensagem%></td>
+                    <td><img class="rounded-circle" src="<%=element.foto%>" style="max-width: 30px" alt=""><%=element.nome%></td>
+                  <%}%>
+                  <td><%=element.lidos%>/<%=element.enviados%></td>
+                  <% if (element.time > 60 && element.time < 60 * 24) { %>
+                  <td class="small text-gray-500 message-time font-weight-bold"><%= Math.floor(element.time/ 60) %> h</td>
+                  <%}else if (element.time >= 60 * 24  && element.time < 60 * 24 * 30) { %>
+                  <td class="small text-gray-500 message-time font-weight-bold"><%= Math.floor(element.time / (60 * 24)) %> d</td>
+                  <%}else if (element.time >= 60 * 24 * 30 && element.time < 60 * 24 * 30 * 12) { %>
+                  <td class="small text-gray-500 message-time font-weight-bold"><%= Math.floor(element.time/(60 * 24 * 30)) %> mo</td>
+                  <%}else if (element.time >= 60 * 24 * 30 * 12) {%>
+                  <td class="small text-gray-500 message-time font-weight-bold"><%= Math.floor(element.time/(60 * 24 * 30 * 12)) %> y</td>
+                  <%}else{%>
+                  <td class="small text-gray-500 message-time font-weight-bold"><%= Math.floor(element.time) %> min</td>
+                  <%}%>
+                  <td><a href="#" data-id="<%=element.id%>"  class="btn btn-danger deletarMensagens"><i  class="fas fa-trash"></i></a></td>
+                </tr> 
+              <%});%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  <!---Container Fluid-->
+<%- include('footer'); -%>
