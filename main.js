@@ -22,7 +22,7 @@ const pool = mysql.createPool({
 //Multer
 const update = require(__dirname + '/server/config/multer');
 
-const path = `http://${process.env.HOST}:${process.env.PORT}`;
+const path = `http://${process.env.EX_HOST}:${process.env.EX_PORT}`;
 
 //My classes
 const Usuario = require(__dirname + '/server/classes/Usuario');
