@@ -17,18 +17,20 @@ var SaveType = {
             }
         })
     },
-    s3: {
-        storage: multerS3({
-            s3: new aws.S3({ /* ... */ }),
-            contentType:multerS3.AUTO_CONTENT_TYPE,
-            bucket: 'eazteacher',
-            acl: 'public-read',
-            key: (req, file, cb) =>{
-                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-                cb(null, file.fieldname + '-' + uniqueSuffix)
-            }
-        })
-    }
+    s3: 
 }
 
-module.exports = multer(SaveType['s3']);
+console.log(SaveType['s3']);
+
+module.exports = multer({
+    storage: multerS3({
+        s3: new aws.S3(),
+        contentType:multerS3.AUTO_CONTENT_TYPE,
+        bucket: process.env.AWS_BUCKET_NAME,
+        acl: 'public-read',
+        key: (req, file, cb) =>{
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+            cb(null, file.fieldname + '-' + uniqueSuffix)
+        }
+    })
+});
