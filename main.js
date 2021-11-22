@@ -204,11 +204,11 @@ function main() {
 
   app.post('/createGroup', update.single('file'), (req, res) => {
     let img;
-    if(req.file)img =  req.file.location
+    if(req.file)img =  req.file.location;
     const {name, description} = req.body;
     grupo.CriarGrupo({img, name, description, user: req.session.userId}).then((results)=>{
       res.status(200);
-      return res.redirect('/groups');
+      return res.status(200).send({result: 'redirect', url:'/groups'});
     }).catch((err)=>{
       console.log(err);
     })

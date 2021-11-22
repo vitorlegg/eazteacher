@@ -87,6 +87,28 @@ $('#createActivity').on('submit',(e)=>{
     });
 }); 
 
+$('#form_createGroup').on('submit',(e)=>{
+  e.preventDefault();
+  let formData = new FormData(document.getElementById("form_createGroup"));
+  console.log(formData)
+  $.ajax({
+      type: "post",
+      url: '/createGroup',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: (response) => {
+        if (response.result == 'redirect') {
+          //redirecting to main page from here.
+          window.location.replace(response.url);
+        }
+      },
+      error: (result) =>{
+          alert("Data not found");
+      }
+    });
+}); 
+
 $('#participateGroup').on('submit',(e)=>{
   console.log('entri');
   e.preventDefault();
