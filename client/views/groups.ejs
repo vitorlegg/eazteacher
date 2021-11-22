@@ -97,8 +97,6 @@
                   </div>
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a name="showMembers" data-id=<%=element.grupos_id%> data-toggle = "modal" data-target =
-                      "#modalShowMembers" class = "dropdown-item text-primary opt">Show Members</a></li>
                   <li><a name="sendMessage" data-id=<%=element.grupos_id%> data-toggle = "modal" data-target =
                       "#modalSendMessage" class = "dropdown-item text-primary opt">Send Message</a></li>
                   <li><a name="unfollow" data-id=<%=element.grupos_id%> class = "dropdown-item text-danger">Unfollow</a>
@@ -132,7 +130,7 @@
             </div>
             <div class="form-group">
               <label for="recipient-name-cg" class="col-form-label" required>Group:</label>
-              <input type="text" class="form-control" name="name" id="recipient-name-cg" maxlength="30">
+              <input type="text" class="form-control" name="name" id="recipient-name-cg" maxlength="20">
             </div>
             <div class="form-group">
               <label for="message-text-cg" class="col-form-label">Description:</label>
@@ -153,21 +151,24 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabelLogout">Create Group</h5>
+          <h5 class="modal-title" id="exampleModalLabelLogout">Follow Group</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <form action="/participateGroup" method="post">
+          <form id ="participateGroup">
             <div class="form-group">
               <label for="recipient-name" class="col-form-label" required>Group:</label>
               <input type="text" class="form-control" name="name" id="recipient-name" maxlength="30">
+              <div class="invalid-feedback">
+                this group doesn't exists.
+              </div>
             </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-          <button type="submit" type="button" class="btn btn-primary">participate</button>
+          <button type="submit" type="button" class="btn btn-primary">Participate</button>
         </div>
         </form>
       </div>
@@ -251,36 +252,6 @@
             <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
             <button type="submit" type="button" class="btn btn-primary">Send</button>
           </div>
-      </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modalShowMembers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabelLogout">Members</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <form id="showMembers"></form>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label" required>Header:</label>
-            <input type="text" class="form-control" name="name" id="recipient-name" maxlength="30">
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" name="description" id="message-text" maxlength="400"></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-          <button type="submit" type="button" class="btn btn-primary">Send</button>
-        </div>
       </div>
       </form>
     </div>

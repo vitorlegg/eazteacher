@@ -16,24 +16,68 @@ class Grupo {
     });
   }
 
+  GrupoExiste({name}){
+    return new Promise((resolve, reject) => {
+      let id = name.split('#');
+      if(id[0] != undefined && id[1] != undefined){
+        let query = `SELECT count(grupos_id) as count FROM grupos WHERE grupos_id = ${id[1]}  AND nome = '${id[0]}';`
+        this.pool.query(query, (error, results, fields) => {
+          if (error) reject({ err: true, message: error, result:'errado'});
+          else{
+            console.log(results);
+            if(results[0].count > 0){
+              resolve({err:false})
+            }else{
+              resolve({err:true, result:'errado'})
+            }
+          } 
+        });
+      }else{
+        reject({ err: true, result:'errado'});
+      }
+    });
+  }
+
+  ParteGrupo({name,user}){
+    return new Promise((resolve, reject) => {
+      let id = name.split('#');
+      if(id[0] != undefined && id[1] != undefined){
+        let query = `SELECT count(grupos_id) as count FROM relacaoGrupo WHERE grupos_id = ${id[1]} and usuarios_id = ${user};`
+        console.log(query);
+        this.pool.query(query, (error, results, fields) => {
+          if (error) reject({ err: true, message: error, result:'errado'});
+          else resolve({err:false, result: results[0]})
+        });
+      }else{
+        reject({ err: true, message: error, result:'errado'});
+      }
+    });
+  }
+
+  RecuperarRelacao({name,user}){
+    return new Promise((resolve, reject) => {
+      let id = name.split('#');
+      if(id[0] != undefined && id[1] != undefined){
+        let query = `UPDATE relacaoGrupo SET ativo = 1 where ativo = 0 and grupos_id = ${id[1]} and usuarios_id = ${user};`;
+        this.pool.query(query, (error, results, fields) => {
+          if (error) reject({ err: true, message: error, result:'errado'});
+          else resolve({err:false,result: 'redirect', url:'/groups'})
+        });
+      }else{
+        reject({ err: true, message: error, result:'errado'});
+      }
+    });
+  }
+
   CriarRelacao({name,user}) {
     return new Promise((resolve, reject) => {
       let id = name.split('#');
-      console.log(id);
-      if(id[0] != undefined || id[1] != undefined){
-        let query = `SELECT grupos_id FROM grupos WHERE grupos_id = ${id[1]}  AND nome = '${id[0]}';`
+      if(id[0] != undefined && id[1] != undefined){
+        let query = `INSERT INTO relacaoGrupo values(null,${user},${id[1]},1);`
         this.pool.query(query, (error, results, fields) => {
-          if (error) reject({ err: true, message: error });
-          else {
-            let query = `INSERT INTO relacaoGrupo values(null,${user},${id[1]},1);`
-            this.pool.query(query, (error, results, fields) => {
-              if (error) reject({ err: false, message: error, result: true });
-              else resolve()
-            });
-          }
+          if (error) reject({ err: false, message: error, result: true });
+          else resolve({err:false,result: 'redirect', url:'/groups'})
         });
-      }else{
-
       }
     });
   }

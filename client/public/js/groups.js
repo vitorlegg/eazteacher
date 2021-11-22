@@ -87,24 +87,27 @@ $('#createActivity').on('submit',(e)=>{
     });
 }); 
 
-$('#showMembers').on('submit',(e)=>{
-    e.preventDefault();
-    $.ajax({
-        type: "post",
-        url: '/showMembers',
-        data:{
-            id:currentId
-        },
-        success: (response) => {
-          if (response.result == 'redirect') {
-            //redirecting to main page from here.
-            window.location.replace(response.url);
-          }
-        },
-        error: (result) =>{
-            alert("Data not found");
+$('#participateGroup').on('submit',(e)=>{
+  console.log('entri');
+  e.preventDefault();
+  $.ajax({
+      type: "post",
+      url: '/participateGroup',
+      data:{
+          name:$(`#${e.currentTarget.id} input[name=name]`).val()
+      },
+      success: (response) => {
+        if (response.result == 'redirect') {
+          //redirecting to main page from here.
+          window.location.replace(response.url);
+        }else if (response.result == 'errado') {
+          $(`#${e.currentTarget.id} .invalid-feedback`).css("display", "block");
         }
-      });
+      },
+      error: (result) =>{
+          alert("Data not found");
+      }
+    });
 }); 
 
 $('a[name=unfollow]').on('click',(e)=>{

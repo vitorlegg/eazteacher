@@ -22,7 +22,7 @@ const pool = mysql.createPool({
 //Multer
 const update = require(__dirname + '/server/config/multer');
 
-const path = `http://${process.env.EX_HOST}`;
+const path = `http://${process.env.EX_HOST}:4000`;
 
 //My classes
 const Usuario = require(__dirname + '/server/classes/Usuario');
@@ -167,29 +167,31 @@ function main() {
     const { email, password } = req.body;
     if (password || email) {
       usuario.Login({ email: email, senha: password }).then((arg) => {
-        if (arg.logado) {
-          req.session.userId = arg.result.usuarios_id;
-          req.session.email = arg.result.email;
-          req.session.nome = arg.result.nome;
-          req.session.sobrenome = arg.result.sobrenome;
-          return res.status(200).send({result: 'redirect', url:'/home'})
-        } else res.redirect('/login');
+        req.session.userId = arg.result.usuarios_id;
+        req.session.email = arg.result.email;
+        req.session.nome = arg.result.nome;
+        req.session.sobrenome = arg.result.sobrenome;
+        return res.status(200).send({result: 'redirect', url:'/home'});
       }).catch((arg) => {
         return res.status(200).send(arg);
       });
     }
   });
 
-  app.post('/cadastrar', (req, res) => {
+  app.post('/cadastrar',async (req, res) => {
     const { email, password, confirmPassword, firstName, lastName } = req.body;
     if (password == confirmPassword) {
+      const usuarioExistente = await usuario.UsuarioExistente({email});
+      if(usuarioExistente.result.count > 0){
+        return res.status(200).send({result: 'errado'});;
+      }
       usuario.CriarUsuario({ email: email, senha: password, nome: firstName, sobrenome: lastName }).then((arg) => {
         usuario.UserInfo({ email }).then((arg) => {
           req.session.userId = arg.result[0].usuarios_id
           req.session.email = arg.result[0].email
           req.session.nome = arg.result[0].nome
           req.session.sobrenome = arg.result[0].sobrenome
-          res.redirect('/home');
+          return res.status(200).send({result: 'redirect', url:'/home'});
         }).catch((arg) => {
           console.log(arg);
         })
@@ -221,14 +223,38 @@ function main() {
     })
   });
 
-  app.post('/participateGroup', (req, res) => {
-    const {name} = req.body;
-    grupo.CriarRelacao({name, user:req.session.userId}).then((results)=>{
-      res.status(200);
-      return res.redirect('/groups');
-    }).catch((err)=>{
+  app.post('/participateGroup', async (req, res) => {
+    try {
+      const {name} = req.body;
+      let user = req.session.userId;
+
+      const grupoExiste = await grupo.GrupoExiste({name});
+      if(grupoExiste.err){
+        return res.status(200).send(grupoExiste);
+      }
+
+      const parteGrupo = await grupo.ParteGrupo({name,user});
+      if(parteGrupo.err){
+        return res.status(200).send(parteGrupo);
+      }
+      console.log(parteGrupo);
+      if (parteGrupo.result.count > 0) {
+        const recuperarRelacao = await  grupo.RecuperarRelacao({name,user});
+        if(recuperarRelacao.err){
+          return res.status(200).send(recuperarRelacao);
+        }
+        return res.status(200).send(recuperarRelacao);
+      } else {
+        const criarRelacao = await grupo.CriarRelacao({name,user});
+        if(criarRelacao.err){
+          return res.status(200).send(criarRelacao);
+        }
+        return res.status(200).send(criarRelacao);
+      }
+    } catch (err) {
       console.log(err);
-    })
+      return res.status(200).send(err);
+    }
   });
 
   app.post('/unfollowGroup', (req, res) => {
@@ -312,6 +338,7 @@ function main() {
       console.log(err);
     })
   }); 
+
   app.post('/gradeActivity', (req, res) => {
     const {id,user,nota} = req.body;
     activity.GradeActivity({id, user,nota}).then((results)=>{

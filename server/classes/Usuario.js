@@ -5,6 +5,18 @@ class Usuario {
   constructor(pool) {
     this.pool = pool;
   }
+  UsuarioExistente({email}){
+    return new Promise((resolve, reject) => {
+      let query = `select count(usuarios_id) as count from usuarios where email = '${email}';`;
+      console.log(query);
+      this.pool.query(query, (err, results, fields) => {
+        if (err) reject({ err: true, message: error });
+        else{
+          resolve({ err: false, result: results[0]})
+        } 
+      });
+    });
+  }
 
   CriarUsuario({ email, senha, nome, sobrenome}) {
     return new Promise((resolve, reject) => {
@@ -27,17 +39,18 @@ class Usuario {
   Login({ email, senha }) {
     return new Promise((resolve, reject) => {
       this.pool.query(`select * from usuarios as u inner join perfil as p on u.usuarios_id = p.usuarios_id where email = '${email}' and ativo = 1;`, (error, results, fields) => {
-        if (error) reject({ err: true, message: error });
+        if (error) reject({ err: true, message: error,  result:'errado'});
         else {
           if(results[0] != undefined){
             bcrypt.compare(senha, results[0].senha, (err, result) => {
-              if (err) reject({ err: true, message: error })
-              else resolve({ err: false, message: error, result: results[0], logado: result });
+              if (err) reject({ err: true, message: error, result:'errado' });
+              else if (!result) reject({ err: true,result:'errado' });
+              else resolve({ err: false, message: error, result: results[0]});
             });
-          }else reject({ err: false, message: 'Usuario ou Senha não correspondem', logado: false,result:'errado' })
+          }else reject({ err: false, result:'errado' });
         }
       });
-    });
+    }); 
   }
 
   UserInfo({ email }) {
