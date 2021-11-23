@@ -24,7 +24,6 @@ class Grupo {
         this.pool.query(query, (error, results, fields) => {
           if (error) reject({ err: true, message: error, result:'errado'});
           else{
-            console.log(results);
             if(results[0].count > 0){
               resolve({err:false})
             }else{
@@ -43,7 +42,6 @@ class Grupo {
       let id = name.split('#');
       if(id[0] != undefined && id[1] != undefined){
         let query = `SELECT count(grupos_id) as count FROM relacaoGrupo WHERE grupos_id = ${id[1]} and usuarios_id = ${user};`
-        console.log(query);
         this.pool.query(query, (error, results, fields) => {
           if (error) reject({ err: true, message: error, result:'errado'});
           else resolve({err:false, result: results[0]})

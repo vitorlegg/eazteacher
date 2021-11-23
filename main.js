@@ -22,7 +22,7 @@ const pool = mysql.createPool({
 //Multer
 const update = require(__dirname + '/server/config/multer');
 
-const path = `http://${process.env.EX_HOST}`;
+const path = `http://${process.env.EX_HOST}:4000`;
 
 //My classes
 const Usuario = require(__dirname + '/server/classes/Usuario');
@@ -153,7 +153,6 @@ function main() {
     let pendingActivities = await activity.PendingActivities({user});
     let profile = await usuario.profileInfo({user});
     let assignedActivity =  await activity.AssignedActivity({id:req.query.id,user});
-    console.log(assignedActivity);
     res.render('pessoas', {path,session:req.session,ativeMessages,pendingActivities,profile, assignedActivity});
   });
 
@@ -193,11 +192,11 @@ function main() {
           req.session.sobrenome = arg.result[0].sobrenome
           return res.status(200).send({result: 'redirect', url:'/home'});
         }).catch((arg) => {
-          console.log(arg);
+          console.log(err);
         })
       }
-      ).catch((arg) => {
-        console.log(arg);
+      ).catch((err) => {
+        console.log(err);
       });
     }else res.redirect('/login');
   });
@@ -237,7 +236,6 @@ function main() {
       if(parteGrupo.err){
         return res.status(200).send(parteGrupo);
       }
-      console.log(parteGrupo);
       if (parteGrupo.result.count > 0) {
         const recuperarRelacao = await  grupo.RecuperarRelacao({name,user});
         if(recuperarRelacao.err){

@@ -7,7 +7,6 @@ class Activity {
   CriarActivity({ titulo, atividade, conclusao, mensagem, id, user}) {
     return new Promise((resolve, reject) => {
       let query = `CALL CreateActivity('${conclusao}', '${titulo}', '${mensagem}','${atividade}',${user},${id});`
-      console.log(query);
       this.pool.query(query, (error, results, fields) => {
         if (error) reject({ err: true, message: error });
         else resolve({ err: false, message: error, result: results })
@@ -94,7 +93,6 @@ class Activity {
   SendActivity({id,file,user}) {
     return new Promise((resolve, reject) => {
       let query = `UPDATE relacaoAtividades SET atividade = '${file}', ativo = 2, conclusao = now()   where ativo > 0  and relacaoAtividades_id =${id} and usuarios_id =${user}`;
-      console.log(query);
       this.pool.query(query, (error, results, fields) => {
         if (error){
           console.log(error);
@@ -108,7 +106,6 @@ class Activity {
   GradeActivity({id,user,nota}) {
     return new Promise((resolve, reject) => {
       let query = `UPDATE relacaoAtividades SET nota = '${nota}', ativo = 3 where ativo > 0  and relacaoAtividades_id =${id}`;
-      console.log(query);
       this.pool.query(query, (error, results, fields) => {
         if (error){
           console.log(error);

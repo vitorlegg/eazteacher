@@ -13,7 +13,6 @@ $('#login').on('submit',(e)=>{
             //redirecting to main page from here.
             window.location.replace(response.url);
           }if (response.result == 'errado') {
-            console.log('sdasd');
             $(".invalid-feedback").css("display", "block");
           } 
         },

@@ -5,7 +5,9 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<%=path%>/">Home</a></li>
       <li class="breadcrumb-item"><a href="<%=path%>/activities">Activities</a></li>
+      <%if(assignedActivity.result[0] != undefined){%>
       <li class="breadcrumb-item active" aria-current="page"><%=assignedActivity.result[0].titulo%></li>
+      <%}%>
     </ol>
   </div>
 
@@ -13,7 +15,9 @@
   <div class="col-lg-12">
     <div class="card mb-4">
       <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <%if(assignedActivity.result[0] != undefined){%>
         <h6 class="m-0 font-weight-bold text-primary"><%=assignedActivity.result[0].titulo%></h6>
+        <%}%>
       </div>
       <div class="table-responsive p-3">
         <table class="table align-items-center table-flush table-hover" id="dataTableHover">

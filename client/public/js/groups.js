@@ -64,7 +64,6 @@ $('#createActivity').on('submit',(e)=>{
   e.preventDefault();
   var formData = new FormData(document.getElementById("createActivity"));
   formData.append('id', currentId);
-  console.log(formData)
   $.ajax({
       type: "post",
       url: '/createActivity',
@@ -90,7 +89,6 @@ $('#createActivity').on('submit',(e)=>{
 $('#form_createGroup').on('submit',(e)=>{
   e.preventDefault();
   let formData = new FormData(document.getElementById("form_createGroup"));
-  console.log(formData)
   $.ajax({
       type: "post",
       url: '/createGroup',
@@ -110,7 +108,6 @@ $('#form_createGroup').on('submit',(e)=>{
 }); 
 
 $('#participateGroup').on('submit',(e)=>{
-  console.log('entri');
   e.preventDefault();
   $.ajax({
       type: "post",

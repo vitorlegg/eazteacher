@@ -1,5 +1,4 @@
 $('#logout').on('click',(e)=>{
-  console.log('dsadasd');
     axios.post('/logout');
   });
 

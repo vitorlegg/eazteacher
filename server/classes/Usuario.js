@@ -8,7 +8,6 @@ class Usuario {
   UsuarioExistente({email}){
     return new Promise((resolve, reject) => {
       let query = `select count(usuarios_id) as count from usuarios where email = '${email}';`;
-      console.log(query);
       this.pool.query(query, (err, results, fields) => {
         if (err) reject({ err: true, message: error });
         else{
@@ -25,7 +24,6 @@ class Usuario {
           let query = `INSERT INTO usuarios VALUES(null,'${email}','${hash}',1);
           SELECT @id_key := last_insert_id() FROM usuarios;
           INSERT INTO perfil VALUES(null,'${nome}','${sobrenome}',null,null,@id_key);`
-          console.log(query);
 
           this.pool.query(query, (error, results, fields) => {
             if (error) reject({ err: true, message: error });
